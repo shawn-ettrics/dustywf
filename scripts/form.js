@@ -116,8 +116,8 @@ const FORM_FIELDS = {
     
     // Step 2 - Manual Layout
     unit: '#unit-3',
-    volume: 'input[data-name="volume"]',  // Fixed spelling
-    layoutMonths: 'input[data-name="layout months"]',
+    volume: 'input[data-name="volume"]',  
+    layoutMonths: 'select[data-name="layout months"]',
     crewSize: 'input[data-name="crew size"]',
     laborCost: 'input[data-name="labor cost"]',
     traditionalProductivity: 'input[data-name="traditional productivity"]',
@@ -475,16 +475,13 @@ function validateValues(values) {
 }
 
 function collectFormValues() {
-    const monthsValue = parseInt(document.querySelector(FORM_FIELDS.layoutMonths)?.value || '3');
-    const bucketedMonths = monthsValue <= 3 ? 3 : monthsValue <= 6 ? 6 : 12;
-    
     return {
         trade: document.querySelector(FORM_FIELDS.contractorTrade).value,
         projectVertical: document.querySelector(FORM_FIELDS.projectVertical).value,
         volume: parseFloat(document.querySelector(FORM_FIELDS.volume).value),
+        months: parseInt(document.querySelector(FORM_FIELDS.layoutMonths).value), // Parse select value to integer
         traditionalCrew: parseFloat(document.querySelector(FORM_FIELDS.crewSize).value),
-        laborCost: parseFloat(document.querySelector(FORM_FIELDS.laborCost).value),
-        months: bucketedMonths  // Behind-the-scenes bucketing
+        laborCost: parseFloat(document.querySelector(FORM_FIELDS.laborCost).value)
     };
 }
 
