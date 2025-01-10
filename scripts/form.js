@@ -295,7 +295,6 @@ function updateDustyResults() {
         `Unit 2:${document.querySelector('[data-default="unit selected"]').textContent}`
     ].join(', ');
     document.querySelector(FORM_FIELDS.automatedLayoutInfo).value = automatedInfo;
-    //comment
 
     // Store cost analysis info
     const costAnalysis = [
@@ -322,50 +321,6 @@ function updateDisplayValue(key, value) {
     }
 }
 
-function updateDustyResults() {
-    const values = collectFormValues();
-    if (!validateValues(values)) return;
-
-    const results = calculateDustyResults(values);
-    
-    // Update display values
-    updateDisplayValue('training-fee', DEFAULTS.trainingFee);
-    updateDisplayValue('dusty-fee', DEFAULTS.dustyAccessFee);
-    updateDisplayValue('daily-cost-dusty', results.dailyCostDusty);
-    updateDisplayValue('days-dusty', results.daysDusty);
-    updateDisplayValue('total-cost-dusty', results.totalCostDusty);
-    updateDisplayValue('gains', results.gains);
-    updateDisplayValue('roi', results.roi);
-
-    // Store Step 3 info in hidden field
-    const automatedInfo = [
-        `dusty crew size:${document.querySelector(FORM_FIELDS.dustyCrewSize).value}`,
-        `labor cost 2:${document.querySelector(FORM_FIELDS.dustyLaborCost).value}`,
-        `dusty productivity:${document.querySelector(FORM_FIELDS.dustyProductivity).value}`,
-        `Unit 2:${document.querySelector(FORM_FIELDS.dustyUnit).value}`
-    ].join(', ');
-    document.querySelector(FORM_FIELDS.automatedLayoutInfo).value = automatedInfo;
-
-    // Store cost analysis info
-    const costAnalysis = [
-        `Days Traditional:${document.querySelector('[data-result="days-traditional"]').textContent}`,
-        `Daily Cost Traditional:${document.querySelector('[data-result="daily-cost-traditional"]').textContent}`,
-        `Total Cost Traditional:${document.querySelector('[data-result="total-cost-traditional"]').textContent}`,
-        `Training Fee:${document.querySelector('[data-result="training-fee"]').textContent}`,
-        `Dusty Fee:${document.querySelector('[data-result="dusty-fee"]').textContent}`,
-        `Daily Cost Dusty:${document.querySelector('[data-result="daily-cost-dusty"]').textContent}`,
-        `Days Dusty:${document.querySelector('[data-result="days-dusty"]').textContent}`,
-        `Total Cost Dusty:${document.querySelector('[data-result="total-cost-dusty"]').textContent}`
-    ].join(', ');
-    document.querySelector(FORM_FIELDS.costAnalysis).value = costAnalysis;
-
-    // Store gains and ROI in combined field
-    const gainsAndRoiValue = [
-        `Gains:${document.querySelector('[data-result="gains"]').textContent}`,
-        `ROI:${document.querySelector('[data-result="roi"]').textContent}`
-    ].join(', ');
-    document.querySelector(FORM_FIELDS.gainsAndRoi).value = gainsAndRoiValue;
-}
 
 // ===============================
 // Calculation Functions
