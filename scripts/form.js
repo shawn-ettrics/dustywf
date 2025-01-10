@@ -527,3 +527,16 @@ function updateProgressIndicator(currentStepIndex) {
         }
     });
 }
+function validateStep(stepElement) {
+    const requiredFields = stepElement.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value) {
+            isValid = false;
+            field.reportValidity(); // This triggers the browser's native validation UI
+        }
+    });
+    
+    return isValid;
+}
