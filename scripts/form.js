@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===============================
 function handleCountryChange(e) {
     const countryHidden = document.querySelector(FORM_FIELDS.countryHidden);
-    const unavailableMessage = document.querySelector(FORM_FIELDS.unavailableMessage);
+    const unavailableMessage = document.querySelector('#unavailable-message');
     
     countryHidden.value = e.target.value;
     
