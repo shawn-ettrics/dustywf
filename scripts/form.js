@@ -168,6 +168,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
+    const form = document.querySelector('[data-name="ROI Form"]');
+    if (form) {
+        // Listen for the Webflow form submission event
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent the default behavior temporarily
+            setTimeout(() => {
+                form.style.display = 'flex'; // Force the display to flex
+            }, 100); // Add a slight delay to ensure Webflow's behavior completes first
+        });
+    }
 });
 
 // ===============================
