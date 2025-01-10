@@ -140,6 +140,7 @@ const FORM_FIELDS = {
 // ===============================
 document.addEventListener('DOMContentLoaded', () => {
     initMultiStepForm();
+    initCustomStepper()
     // Hide elements with 'hide-with-script' class
     document.querySelectorAll('.hide-with-script').forEach(el => {
         el.style.display = 'none';
@@ -550,5 +551,38 @@ function initMultiStepForm() {
             steps[currentStepIndex].style.display = 'none';
             steps[currentStepIndex - 1].style.display = 'flex';
         });
+    });
+}
+function initCustomStepper() {
+    const crewSizeInput = document.querySelector('#crew-size');
+    const decrementBtn = crewSizeInput.parentElement.querySelector('.stepper-btn:first-child');
+    const incrementBtn = crewSizeInput.parentElement.querySelector('.stepper-btn:last-child');
+
+    // Set initial value
+    crewSizeInput.value = DEFAULTS.layoutCrew.traditional;
+
+    decrementBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const currentValue = parseInt(crewSizeInput.value) || 0;
+        if (currentValue > 1) {
+            crewSizeInput.value = currentValue - 1;
+            crewSizeInput.dispatchEvent(new Event('change'));
+        }
+    });
+
+    incrementBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const currentValue = parseInt(crewSizeInput.value) || 0;
+        crewSizeInput.value = currentValue + 1;
+        crewSizeInput.dispatchEvent(new Event('change'));
+    });
+
+    // Ensure numeric input only
+    crewSizeInput.addEventListener('input', () => {
+        const value = crewSizeInput.value;
+        crewSizeInput.value = value.replace(/[^0-9]/g, '');
+        if (crewSizeInput.value === '') {
+            crewSizeInput.value = '1';
+        }
     });
 }
