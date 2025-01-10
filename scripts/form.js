@@ -113,27 +113,26 @@ const FORM_FIELDS = {
     projectVertical: 'select[data-name="Project Vertical"]',
     countryRadios: 'input[name="country"]',
     countryHidden: 'input[data-name="Country 2"]',
-    unavailableMessage: '#unavailable-message',
-
+    
     // Step 2 - Manual Layout
-    unit: 'select[data-name="unit"]',
-    volume: 'input[data-name="volumn"]',
+    unit: '#unit-3',
+    volume: 'input[data-name="volume"]',  // Fixed spelling
     layoutMonths: 'input[data-name="layout months"]',
     crewSize: 'input[data-name="crew size"]',
     laborCost: 'input[data-name="labor cost"]',
     traditionalProductivity: 'input[data-name="traditional productivity"]',
 
-    // Step 3 - Automated Layout
-    dustyCrewSize: 'input[data-name="dusty crew size"]',
-    dustyLaborCost: 'input[data-name="labor cost 2"]',
+    // Step 3 
+    dustyCrewDisplay: '[data-default="dusty crew"]',
+    dustyLaborDisplay: '[data-default="dusty labor cost"]',
+    dustyUnitDisplay: '[data-default="unit selected"]',
     dustyProductivity: 'input[data-name="dusty productivity"]',
-    dustyUnit: 'select[data-name="Unit 2"]',
 
     // Hidden Storage Fields
-    traditionalLayoutInfo: 'input[data-name="Traditional Layout Info"]',
-    automatedLayoutInfo: 'input[data-name="Automated Layout Info"]',
-    costAnalysis: 'input[data-name="Cost Analysis"]',
-    gainsAndRoi: 'input[data-name="Gains and ROI"]',
+    traditionalLayoutInfo: '[data-traditional-layout-info]',
+    automatedLayoutInfo: '[data-automated-layout-info]',
+    costAnalysis: '[data-cost-analysis]',
+    gainsAndRoi: 'input[data-name="Gains and ROI"]'
 };
 
 // ===============================
@@ -213,11 +212,19 @@ function populateTradeBasedFields() {
     const complexity = PROJECT_TYPES[projectVertical].complexity;
     
     // Set units based on trade
-    const unitSelect = document.querySelector(FORM_FIELDS.unit);
-    const dustyUnitSelect = document.querySelector(FORM_FIELDS.dustyUnit);
-    if (unitSelect && dustyUnitSelect && tradeConfig) {
+    const unitSelect = document.querySelector('#unit-3'); // Step 2 unit select
+    const dustyUnitDisplay = document.querySelector('[data-default="unit selected"]'); // Step 3 unit display
+    if (unitSelect && dustyUnitDisplay && tradeConfig) {
         unitSelect.value = tradeConfig.unit;
-        dustyUnitSelect.value = tradeConfig.unit;
+        dustyUnitDisplay.textContent = tradeConfig.unit;
+    }
+
+    // Set labor cost
+    const laborCostInput = document.querySelector(FORM_FIELDS.laborCost);
+    const dustyLaborDisplay = document.querySelector('[data-default="dusty labor cost"]');
+    if (laborCostInput && dustyLaborDisplay) {
+        laborCostInput.value = DEFAULTS.laborCost;
+        dustyLaborDisplay.textContent = DEFAULTS.laborCost;
     }
 
     // Set productivity rates
@@ -235,11 +242,8 @@ function populateTradeBasedFields() {
         dustyProductivity.value = dustyRate;
     }
 
-    // Set default values for Step 2 & 3
-    document.querySelector(FORM_FIELDS.layoutMonths).value = DEFAULTS.layoutMonths;
+    // Set crew sizes
     document.querySelector(FORM_FIELDS.crewSize).value = DEFAULTS.layoutCrew.traditional;
-    document.querySelector(FORM_FIELDS.laborCost).value = DEFAULTS.laborCost;
-    document.querySelector(FORM_FIELDS.dustyLaborCost).value = DEFAULTS.laborCost;
 }
 // ===============================
 // Update Functions
