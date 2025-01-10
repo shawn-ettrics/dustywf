@@ -3,22 +3,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const multistepWrapper = document.querySelector('.multistep-wrapper'); // Select the multistep-wrapper
 
     if (form && multistepWrapper) {
-        // Move w-form-done and w-form-fail into multistep-wrapper
-        const formDone = form.querySelector('.w-form-done');
-        const formFail = form.querySelector('.w-form-fail');
-        if (formDone) {
-            multistepWrapper.appendChild(formDone);
-        }
-        if (formFail) {
-            multistepWrapper.appendChild(formFail);
-        }
+        // Function to move success and failure messages
+        const moveFormMessages = () => {
+            const formDone = form.querySelector('.w-form-done');
+            const formFail = form.querySelector('.w-form-fail');
 
-        // Maintain form visibility after a successful submission
+            if (formDone && formDone.parentElement !== multistepWrapper) {
+                multistepWrapper.appendChild(formDone);
+            }
+
+            if (formFail && formFail.parentElement !== multistepWrapper) {
+                multistepWrapper.appendChild(formFail);
+            }
+        };
+
+        // Maintain form visibility and handle success
         form.addEventListener('w-form-success', function () {
-            // Ensure the form stays visible by removing any 'w-hidden' class and resetting styles
+            console.log("Form submitted successfully.");
+
+            // Ensure the form stays visible
             form.classList.remove('w-hidden');
             form.style.display = 'flex';
             form.style.height = 'auto';
+
+            // Move success and failure messages
+            moveFormMessages();
 
             // Disable all input fields and lower opacity
             const inputs = form.querySelectorAll('input, select, textarea');
@@ -28,12 +37,17 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-        // Maintain form visibility after a failed submission
+        // Maintain form visibility and handle failure
         form.addEventListener('w-form-fail', function () {
-            // Ensure the form stays visible by removing any 'w-hidden' class and resetting styles
+            console.log("Form submission failed.");
+
+            // Ensure the form stays visible
             form.classList.remove('w-hidden');
             form.style.display = 'flex';
             form.style.height = 'auto';
+
+            // Move success and failure messages
+            moveFormMessages();
         });
 
         // Observe changes to the form's attributes to keep it visible
