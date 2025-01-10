@@ -492,14 +492,34 @@ function initMultiStepForm() {
     // Hide all steps except first one
     steps.forEach((step, index) => {
         if (index !== 0) {
-            step.hidden = true;
+            step.style.display = 'none';
         }
     });
+    
+    // Validate current step's required fields
+    function validateStep(stepElement) {
+        const requiredFields = stepElement.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value) {
+                isValid = false;
+                field.reportValidity(); // This triggers the browser's native validation UI
+            }
+        });
+        
+        return isValid;
+    }
     
     // Handle Next button clicks
     nextButtons.forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            
+            // Validate current step before proceeding
+            if (!validateStep(steps[index])) {
+                return; // Stop if validation fails
+            }
             
             if (index === 0) {
                 populateTradeBasedFields();
@@ -509,8 +529,8 @@ function initMultiStepForm() {
                 updateDustyResults();
             }
             
-            steps[index].hidden = true;
-            steps[index + 1].hidden = false;
+            steps[index].style.display = 'none';
+            steps[index + 1].style.display = 'flex';
         });
     });
     
@@ -520,11 +540,11 @@ function initMultiStepForm() {
             e.preventDefault();
             
             const currentStepIndex = Array.from(steps).findIndex(
-                step => !step.hidden
+                step => step.style.display !== 'none'
             );
             
-            steps[currentStepIndex].hidden = true;
-            steps[currentStepIndex - 1].hidden = false;
+            steps[currentStepIndex].style.display = 'none';
+            steps[currentStepIndex - 1].style.display = 'flex';
         });
     });
 }
