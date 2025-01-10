@@ -146,24 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
         el.style.display = 'none';
     });
 
-    // Set default dusty crew size
-    const dustyCrewInput = document.querySelector(FORM_FIELDS.dustyCrewSize);
-    if (dustyCrewInput) {
-        dustyCrewInput.value = DEFAULTS.layoutCrew.dusty;
-    }
-
     // Country selection handling
     document.querySelectorAll(FORM_FIELDS.countryRadios).forEach(radio => {
         radio.addEventListener('change', handleCountryChange);
-    });
-
-    // Sync labor costs
-    const laborCostInputs = [
-        document.querySelector(FORM_FIELDS.laborCost),
-        document.querySelector(FORM_FIELDS.dustyLaborCost)
-    ];
-    laborCostInputs.forEach(input => {
-        input?.addEventListener('input', syncLaborCosts);
     });
 
     // Step navigation and result updates
@@ -310,8 +295,11 @@ function updateDustyResults() {
     document.querySelector(FORM_FIELDS.costAnalysis).value = costAnalysis;
 
     // Store gains and ROI
-    document.querySelector(FORM_FIELDS.gains).value = document.querySelector('[data-result="gains"]').textContent;
-    document.querySelector(FORM_FIELDS.roi).value = document.querySelector('[data-result="roi"]').textContent;
+    const gainsAndRoiValue = [
+        `Gains:${document.querySelector('[data-result="gains"]').textContent}`,
+        `ROI:${document.querySelector('[data-result="roi"]').textContent}`
+    ].join(', ');
+    document.querySelector(FORM_FIELDS.gainsAndRoi).value = gainsAndRoiValue;
 }
 
 function updateDisplayValue(key, value) {
