@@ -289,10 +289,10 @@ function updateDustyResults() {
 
     // Store Step 3 info in hidden field
     const automatedInfo = [
-        `dusty crew size:${document.querySelector(FORM_FIELDS.dustyCrewSize).value}`,
-        `labor cost 2:${document.querySelector(FORM_FIELDS.dustyLaborCost).value}`,
+        `dusty crew size:${document.querySelector('[data-default="dusty crew"]').textContent}`,
+        `labor cost 2:${document.querySelector('[data-default="dusty labor cost"]').textContent}`,
         `dusty productivity:${document.querySelector(FORM_FIELDS.dustyProductivity).value}`,
-        `Unit 2:${document.querySelector(FORM_FIELDS.dustyUnit).value}`
+        `Unit 2:${document.querySelector('[data-default="unit selected"]').textContent}`
     ].join(', ');
     document.querySelector(FORM_FIELDS.automatedLayoutInfo).value = automatedInfo;
 
