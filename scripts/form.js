@@ -139,6 +139,9 @@ const FORM_FIELDS = {
 // Main Event Handlers
 // ===============================
 document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.dev-mode').forEach(el => {
+        el.classList.remove('dev-mode');
+    });
     initMultiStepForm();
     initCustomStepper()
     // Hide elements with 'hide-with-script' class
@@ -511,9 +514,9 @@ function updateProgressIndicator(currentStepIndex) {
     const stepIndicators = document.querySelectorAll('.form-step-indicator');
     stepIndicators.forEach((indicator, index) => {
         if (index <= currentStepIndex) {
-            indicator.classList.add('visited');
+            indicator.classList.add('complete');
         } else {
-            indicator.classList.remove('visited');
+            indicator.classList.remove('complete');
         }
     });
 
@@ -521,9 +524,9 @@ function updateProgressIndicator(currentStepIndex) {
     const progressBars = document.querySelectorAll('.form-progress-bar');
     progressBars.forEach((bar, index) => {
         if (index < currentStepIndex) {
-            bar.classList.add('visited');
+            bar.classList.add('complete');
         } else {
-            bar.classList.remove('visited');
+            bar.classList.remove('complete');
         }
     });
 }
