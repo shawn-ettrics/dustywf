@@ -295,6 +295,7 @@ function updateDustyResults() {
         `Unit 2:${document.querySelector('[data-default="unit selected"]').textContent}`
     ].join(', ');
     document.querySelector(FORM_FIELDS.automatedLayoutInfo).value = automatedInfo;
+    //comment
 
     // Store cost analysis info
     const costAnalysis = [
