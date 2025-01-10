@@ -433,30 +433,15 @@ function initMultiStepForm() {
         }
     });
     
-    // Validate current step's required fields
-    function validateStep(stepElement) {
-        const requiredFields = stepElement.querySelectorAll('[required]');
-        let isValid = true;
-        
-        requiredFields.forEach(field => {
-            if (!field.value) {
-                isValid = false;
-                field.reportValidity(); // This triggers the browser's native validation UI
-            }
-        });
-        
-        return isValid;
-    }
+    // Initialize progress indicator
+    updateProgressIndicator(0);
     
     // Handle Next button clicks
     nextButtons.forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             
-            // Validate current step before proceeding
-            if (!validateStep(steps[index])) {
-                return; // Stop if validation fails
-            }
+            if (!validateStep(steps[index])) return;
             
             if (index === 0) {
                 populateTradeBasedFields();
@@ -468,6 +453,7 @@ function initMultiStepForm() {
             
             steps[index].style.display = 'none';
             steps[index + 1].style.display = 'flex';
+            updateProgressIndicator(index + 1);
         });
     });
     
@@ -482,6 +468,7 @@ function initMultiStepForm() {
             
             steps[currentStepIndex].style.display = 'none';
             steps[currentStepIndex - 1].style.display = 'flex';
+            updateProgressIndicator(currentStepIndex - 1);
         });
     });
 }
@@ -515,6 +502,28 @@ function initCustomStepper() {
         crewSizeInput.value = value.replace(/[^0-9]/g, '');
         if (crewSizeInput.value === '') {
             crewSizeInput.value = '1';
+        }
+    });
+}
+
+function updateProgressIndicator(currentStepIndex) {
+    // Update step indicators
+    const stepIndicators = document.querySelectorAll('.form-step-indicator');
+    stepIndicators.forEach((indicator, index) => {
+        if (index <= currentStepIndex) {
+            indicator.classList.add('visited');
+        } else {
+            indicator.classList.remove('visited');
+        }
+    });
+
+    // Update progress bars
+    const progressBars = document.querySelectorAll('.form-progress-bar');
+    progressBars.forEach((bar, index) => {
+        if (index < currentStepIndex) {
+            bar.classList.add('visited');
+        } else {
+            bar.classList.remove('visited');
         }
     });
 }
