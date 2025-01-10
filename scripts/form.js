@@ -151,6 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', handleCountryChange);
     });
 
+
     // Step navigation and result updates
     document.querySelectorAll('[data-form="next-btn"]').forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
@@ -182,11 +183,6 @@ function handleCountryChange(e) {
     }
 }
 
-function syncLaborCosts(e) {
-    const value = e.target.value;
-    document.querySelector(FORM_FIELDS.laborCost).value = value;
-    document.querySelector(FORM_FIELDS.dustyLaborCost).value = value;
-}
 
 function populateTradeBasedFields() {
     const selectedTrade = document.querySelector(FORM_FIELDS.contractorTrade).value;
@@ -329,21 +325,16 @@ function calculateTraditionalResults(values) {
 }
 
 function calculateDustyResults(values) {
-    const complexity = PROJECT_TYPES[values.projectVertical].complexity;
-    const dustyRate = getEfficiencyRate(values.trade, complexity, true);
+    // Get the current value from the input, which might be user-modified
+    const dustyRate = parseFloat(document.querySelector(FORM_FIELDS.dustyProductivity).value);
     
-    // Days calculation only considers volume and rate
     const daysDusty = Math.round(values.volume / dustyRate);
-    
-    // Use fixed daily cost from spreadsheet
     const dailyCostDusty = 1250;
     
-    // Calculate total cost following spreadsheet formula
     const totalCostDusty = (dailyCostDusty * daysDusty) + 
                           (DEFAULTS.dustyAccessFee * values.months) + 
                           DEFAULTS.trainingFee;
     
-    // Calculate traditional total cost
     const traditionalResults = calculateTraditionalResults(values);
     const totalCostTraditional = traditionalResults.totalCostTraditional;
     
