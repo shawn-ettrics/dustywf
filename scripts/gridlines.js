@@ -33,7 +33,7 @@ export function initializeCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const gridColor = ctx.createLinearGradient(0, 0, 0, canvas.height);
 
-        gridColor.addColorStop(currentStops.orange, '#F89645');
+        gridColor.addColorStop(currentStops.orange, '#E4771D');
         gridColor.addColorStop(currentStops.grey, '#EAECF0');
 
         ctx.strokeStyle = gridColor;
