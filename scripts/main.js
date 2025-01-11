@@ -37,21 +37,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-form="next-btn"]').forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            // Advance canvas state first
             if (index === 0) {
+                if (canvasControls) canvasControls.nextState();
                 populateTradeBasedFields();
             } else if (index === 1) {
+                if (canvasControls) canvasControls.nextState();
                 updateTraditionalResults();
-                if (canvasControls) canvasControls.nextState(); // Advance canvas animation
             } else if (index === 2) {
+                if (canvasControls) canvasControls.nextState();
                 updateDustyResults();
-                if (canvasControls) canvasControls.nextState(); // Advance canvas animation
             }
         });
     });
 
     // Handle back button clicks for canvas animation
     document.querySelectorAll('[data-form="back-btn"]').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
             if (canvasControls) canvasControls.prevState();
         });
     });
