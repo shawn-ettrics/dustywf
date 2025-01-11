@@ -26,15 +26,17 @@ document.addEventListener("DOMContentLoaded", function () {
             form.style.display = 'flex';
             form.style.height = 'auto';
 
-            // Move success and failure messages
-            moveFormMessages();
+
 
             // Disable all input fields and lower opacity
             const inputs = form.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                input.disabled = true; // Disable the field
-                input.style.opacity = '0.4'; // Lower the font opacity
-            });
+            setTimeout(() => {
+                inputs.forEach(input => {
+                    input.disabled = true;
+                    input.style.opacity = '0.4';
+                    moveFormMessages();
+                });
+            }, 200);
         });
 
         // Maintain form visibility and handle failure
