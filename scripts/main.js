@@ -37,16 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-form="next-btn"]').forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Advance canvas state first
-            if (index === 0) {
+            
+            // Get the current form step
+            const currentStep = document.querySelectorAll('[data-form="step"]')[index];
+            
+            // Only proceed if validation passes
+            if (validateStep(currentStep)) {
                 if (canvasControls) canvasControls.nextState();
-                populateTradeBasedFields();
-            } else if (index === 1) {
-                if (canvasControls) canvasControls.nextState();
-                updateTraditionalResults();
-            } else if (index === 2) {
-                if (canvasControls) canvasControls.nextState();
-                updateDustyResults();
+                
+                if (index === 0) {
+                    populateTradeBasedFields();
+                } else if (index === 1) {
+                    updateTraditionalResults();
+                } else if (index === 2) {
+                    updateDustyResults();
+                }
             }
         });
     });
