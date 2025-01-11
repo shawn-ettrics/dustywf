@@ -5,43 +5,56 @@ document.addEventListener("DOMContentLoaded", function () {
     if (form && multistepWrapper) {
         // Function to move success and failure messages
         const moveFormMessages = () => {
+            console.log("Attempting to move form messages...");
             const formDone = form.querySelector('.w-form-done');
             const formFail = form.querySelector('.w-form-fail');
 
-            if (formDone && formDone.parentElement !== multistepWrapper) {
-                multistepWrapper.appendChild(formDone);
+            if (formDone) {
+                console.log("Found .w-form-done");
+                if (formDone.parentElement !== multistepWrapper) {
+                    multistepWrapper.appendChild(formDone);
+                    console.log(".w-form-done moved to multistep-wrapper");
+                }
+            } else {
+                console.log(".w-form-done not found");
             }
 
-            if (formFail && formFail.parentElement !== multistepWrapper) {
-                multistepWrapper.appendChild(formFail);
+            if (formFail) {
+                console.log("Found .w-form-fail");
+                if (formFail.parentElement !== multistepWrapper) {
+                    multistepWrapper.appendChild(formFail);
+                    console.log(".w-form-fail moved to multistep-wrapper");
+                }
+            } else {
+                console.log(".w-form-fail not found");
             }
         };
 
-        // Maintain form visibility and handle success
+        // Handle form submission success
         form.addEventListener('w-form-success', function () {
-            console.log("Form submitted successfully.");
+            console.log("w-form-success event triggered");
 
             // Ensure the form stays visible
             form.classList.remove('w-hidden');
             form.style.display = 'flex';
             form.style.height = 'auto';
 
-
-
             // Disable all input fields and lower opacity
             const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.style.opacity = '0.4';
+            });
+
+            // Move success and failure messages
             setTimeout(() => {
-                inputs.forEach(input => {
-                    input.disabled = true;
-                    input.style.opacity = '0.4';
-                    moveFormMessages();
-                });
-            }, 200);
+                moveFormMessages();
+            }, 200); // Slight delay to allow Webflow to complete DOM updates
         });
 
-        // Maintain form visibility and handle failure
+        // Handle form submission failure
         form.addEventListener('w-form-fail', function () {
-            console.log("Form submission failed.");
+            console.log("w-form-fail event triggered");
 
             // Ensure the form stays visible
             form.classList.remove('w-hidden');
@@ -49,7 +62,14 @@ document.addEventListener("DOMContentLoaded", function () {
             form.style.height = 'auto';
 
             // Move success and failure messages
-            moveFormMessages();
+            setTimeout(() => {
+                moveFormMessages();
+            }, 200);
+        });
+
+        // Fallback: Listen for the generic submit event
+        form.addEventListener('submit', function () {
+            console.log("Form submit event triggered");
         });
 
         // Observe changes to the form's attributes to keep it visible
@@ -68,5 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Start observing the form for changes to its attributes
         observer.observe(form, { attributes: true });
+    } else {
+        console.log("Form or multistep-wrapper not found in the DOM");
     }
 });
