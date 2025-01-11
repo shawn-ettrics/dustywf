@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize form submission handling
     initFormSubmissionHandler();
     
-    // Initialize calculator functionality
     document.querySelectorAll('.dev-mode').forEach(el => {
         el.classList.remove('dev-mode');
     });
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initMultiStepForm();
     initCustomStepper();
     
-    // Hide elements with 'hide-with-script' class
     document.querySelectorAll('.hide-with-script').forEach(el => {
         el.style.display = 'none';
     });
