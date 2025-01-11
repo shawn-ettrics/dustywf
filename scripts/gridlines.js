@@ -1,10 +1,14 @@
 export function initializeCanvas() {
-    // Create and insert canvas
-    const container = document.querySelector('.roi-container');
-    if (!container) return null;
+    // Create and insert canvas with wrapper
+    const roiContainer = document.querySelector('.roi-container');
+    if (!roiContainer) return null;
+
+    const canvasWrapper = document.createElement('div');
+    canvasWrapper.className = 'canvas-wrapper';
 
     const canvas = document.createElement('canvas');
-    container.appendChild(canvas);
+    canvasWrapper.appendChild(canvas);
+    roiContainer.appendChild(canvasWrapper);
 
     const ctx = canvas.getContext('2d');
 
@@ -20,8 +24,9 @@ export function initializeCanvas() {
     let currentStops = { orange: 0, grey: 0 };
 
     function resizeCanvas() {
-        canvas.width = container.clientWidth;
-        canvas.height = container.clientHeight;
+        const rect = canvasWrapper.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
     }
 
     function drawGrid(perspectiveScale = 5) {

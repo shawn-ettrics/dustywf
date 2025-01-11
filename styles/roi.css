@@ -1,5 +1,5 @@
-.roi-container {
-    position: relative;
+.canvas-wrapper {
+    position: absolute;
     overflow: hidden;
     
     /* Linear Mask for Fading Grid Upwards */
@@ -10,4 +10,5 @@ canvas {
     display: block;
     position: absolute;
     bottom: 0;
+    z-index: 0;
 }
