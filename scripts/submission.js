@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (form.classList.contains('w-hidden') || form.style.display === 'none') {
                 form.classList.remove('w-hidden'); // Remove Webflow's hidden class
                 form.style.display = 'flex'; // Ensure the form is displayed as flex
-                form.style.height = 'auto'; // Reset the height to auto
-                console.log("Form visibility maintained.");
             }
         };
 
@@ -21,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Only move if the element is visible
                 if (element.parentElement !== multistepWrapper) {
                     multistepWrapper.appendChild(element);
-                    console.log(`${element.className} moved to multistep-wrapper`);
                 }
             }
         };
@@ -65,9 +62,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
             failObserver.observe(formFail, { attributes: true });
         }
-
-        console.log("Observers initialized for specific elements.");
-    } else {
-        console.log("Form, multistep-wrapper, or required elements not found in the DOM");
     }
 });
