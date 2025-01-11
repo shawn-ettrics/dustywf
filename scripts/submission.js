@@ -26,6 +26,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
 
+        // Function to lock inputs and adjust opacity
+        const lockInputs = () => {
+            console.log("Locking all inputs...");
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.disabled = true; // Disable the field
+                input.style.opacity = '0.4'; // Lower the font opacity
+            });
+        };
+
         // Observe the form's attributes for visibility changes
         const formObserver = new MutationObserver(() => {
             keepFormVisible();
@@ -37,6 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (formDone) {
             const doneObserver = new MutationObserver(() => {
                 moveFormMessage(formDone);
+
+                // Lock inputs when .w-form-done becomes visible
+                if (formDone.style.display === 'block') {
+                    lockInputs();
+                }
             });
 
             doneObserver.observe(formDone, { attributes: true });
