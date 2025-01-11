@@ -5,15 +5,18 @@ document.addEventListener("DOMContentLoaded", function () {
     if (form && multistepWrapper) {
         // Function to keep the form visible
         const keepFormVisible = () => {
-            form.classList.remove('w-hidden'); // Remove Webflow's hidden class
-            form.style.display = 'flex'; // Ensure the form is displayed as flex
-            form.style.height = 'auto'; // Reset the height to auto
+            if (form.classList.contains('w-hidden') || form.style.display === 'none') {
+                form.classList.remove('w-hidden'); // Remove Webflow's hidden class
+                form.style.display = 'flex'; // Ensure the form is displayed as flex
+                form.style.height = 'auto'; // Reset the height to auto
+                console.log("Form visibility maintained.");
+            }
         };
 
         // Function to move success and failure messages
         const moveFormMessage = (element) => {
             if (element && element.style.display === 'block') {
-                // Only move if it is visible
+                // Only move if the element is visible
                 if (element.parentElement !== multistepWrapper) {
                     multistepWrapper.appendChild(element);
                     console.log(`${element.className} moved to multistep-wrapper`);
@@ -22,8 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Observe changes to the form's attributes
-        const formObserver = new MutationObserver(() => {
-            keepFormVisible(); // Ensure the form stays visible
+        const formObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                    keepFormVisible(); // Ensure the form stays visible
+                }
+            });
         });
 
         formObserver.observe(form, { attributes: true });
@@ -41,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
             childList: true, // Watch for changes to child elements
             subtree: true,   // Watch within the subtree of the form
         });
+
+        console.log("Observers initialized.");
     } else {
         console.log("Form or multistep-wrapper not found in the DOM");
     }
