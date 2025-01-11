@@ -1,5 +1,4 @@
-// main.js
-import { FORM_FIELDS, DEFAULTS } from './modules/constants.js';
+import { FORM_FIELDS } from './modules/constants.js';
 import { 
     handleCountryChange, 
     populateTradeBasedFields, 
@@ -9,6 +8,7 @@ import {
     updateTraditionalResults
 } from './modules/form-handlers.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
+import { initializeCanvas } from './gridlines.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize form submission handling
@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initMultiStepForm();
     initCustomStepper();
+    
+    // Initialize canvas
+    const canvasControls = initializeCanvas();
     
     document.querySelectorAll('.hide-with-script').forEach(el => {
         el.style.display = 'none';
@@ -38,9 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 populateTradeBasedFields();
             } else if (index === 1) {
                 updateTraditionalResults();
+                if (canvasControls) canvasControls.nextState(); // Advance canvas animation
             } else if (index === 2) {
                 updateDustyResults();
+                if (canvasControls) canvasControls.nextState(); // Advance canvas animation
             }
+        });
+    });
+
+    // Handle back button clicks for canvas animation
+    document.querySelectorAll('[data-form="back-btn"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (canvasControls) canvasControls.prevState();
         });
     });
 });

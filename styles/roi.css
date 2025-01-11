@@ -1,0 +1,13 @@
+.roi-container {
+    position: relative;
+    overflow: hidden;
+    
+    /* Linear Mask for Fading Grid Upwards */
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+}
+canvas {
+    display: block;
+    position: absolute;
+    bottom: 0;
+}
