@@ -1,3 +1,7 @@
+import { FORM_FIELDS, DEFAULTS, TRADE_TYPES, PROJECT_TYPES } from './constants.js';
+import { validateStep, validateValues, collectFormValues, formatValue } from './utils.js';
+import { calculateTraditionalResults, calculateDustyResults, getEfficiencyRate } from './calculations.js';
+
 export function initMultiStepForm() {
     const form = document.querySelector('[data-form="multistep"]');
     const steps = form.querySelectorAll('[data-form="step"]');
@@ -164,19 +168,7 @@ export function populateTradeBasedFields() {
     document.querySelector(FORM_FIELDS.crewSize).value = DEFAULTS.layoutCrew.traditional;
 }
 
-export function validateStep(stepElement) {
-    const requiredFields = stepElement.querySelectorAll('[required]');
-    let isValid = true;
-    
-    requiredFields.forEach(field => {
-        if (!field.value) {
-            isValid = false;
-            field.reportValidity(); // This triggers the browser's native validation UI
-        }
-    });
-    
-    return isValid;
-}
+
 
 export function updateDustyResults() {
     const values = collectFormValues();

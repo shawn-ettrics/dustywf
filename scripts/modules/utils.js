@@ -1,3 +1,5 @@
+import { FORM_FIELDS, TRADE_TYPES } from './constants.js';
+
 export function formatValue(key, value) {
     // Handle monetary values (anything with 'cost', 'fee', or 'gains' in the key)
     if (key.includes('cost') || key.includes('fee') || key.includes('gains')) {
@@ -44,6 +46,20 @@ export function collectFormValues() {
     };
 }
 
-function getTradeUnit(trade) {
+export function getTradeUnit(trade) {
     return TRADE_TYPES[trade]?.unit || null;
+}
+
+export function validateStep(stepElement) {
+    const requiredFields = stepElement.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value) {
+            isValid = false;
+            field.reportValidity(); // This triggers the browser's native validation UI
+        }
+    });
+    
+    return isValid;
 }

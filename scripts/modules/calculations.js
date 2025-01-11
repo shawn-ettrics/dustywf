@@ -1,3 +1,5 @@
+import { TRADE_TYPES, PROJECT_TYPES, TRADITIONAL_EFFICIENCY, DUSTY_EFFICIENCY, DEFAULTS, FORM_FIELDS } from './constants.js';
+
 export function calculateTraditionalResults(values) {
     const complexity = PROJECT_TYPES[values.projectVertical].complexity;
     const traditionalRate = getEfficiencyRate(values.trade, complexity, false);
