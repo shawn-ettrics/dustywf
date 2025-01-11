@@ -4,9 +4,9 @@ import {
     populateTradeBasedFields, 
     initMultiStepForm, 
     initCustomStepper, 
-    updateDustyResults
+    updateDustyResults,
+    updateTraditionalResults
 } from './modules/form-handlers.js';
-import { updateTraditionalResults  } from './modules/calculations.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
 
 document.addEventListener('DOMContentLoaded', () => {

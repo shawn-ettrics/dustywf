@@ -222,3 +222,26 @@ export function updateDustyResults() {
     ].join(', ');
     document.querySelector(FORM_FIELDS.gainsAndRoi).value = gainsAndRoiValue;
 }
+
+export function updateTraditionalResults() {
+    const values = collectFormValues();
+    if (!validateValues(values)) return;
+    
+    const results = calculateTraditionalResults(values);
+    
+    // Update display values
+    updateDisplayValue('days-traditional', results.daysTraditional);
+    updateDisplayValue('daily-cost-traditional', results.dailyCostTraditional);
+    updateDisplayValue('total-cost-traditional', results.totalCostTraditional);
+
+    // Store Step 2 info in hidden field
+    const traditionalInfo = [
+        `unit:${document.querySelector(FORM_FIELDS.unit).value}`,
+        `volumn:${document.querySelector(FORM_FIELDS.volume).value}`,
+        `layout months:${document.querySelector(FORM_FIELDS.layoutMonths).value}`,
+        `crew size:${document.querySelector(FORM_FIELDS.crewSize).value}`,
+        `labor cost:${document.querySelector(FORM_FIELDS.laborCost).value}`,
+        `traditional productivity:${document.querySelector(FORM_FIELDS.traditionalProductivity).value}`
+    ].join(', ');
+    document.querySelector(FORM_FIELDS.traditionalLayoutInfo).value = traditionalInfo;
+}
