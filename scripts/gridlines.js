@@ -14,7 +14,7 @@ export function initializeCanvas() {
 
     const states = [
         { orange: 0, grey: 0 },
-        { orange: 0.4, grey: 0.6 },
+        { orange: 0.4, grey: 0.55 },
         { orange: 0.7, grey: 0.8 },
         { orange: 1, grey: 1 }
     ];
