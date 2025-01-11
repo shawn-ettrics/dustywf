@@ -2,6 +2,13 @@ import { FORM_FIELDS, DEFAULTS, TRADE_TYPES, PROJECT_TYPES } from './constants.j
 import { validateStep, validateValues, collectFormValues, formatValue } from './utils.js';
 import { calculateTraditionalResults, calculateDustyResults, getEfficiencyRate } from './calculations.js';
 
+function updateDisplayValue(key, value) {
+    const element = document.querySelector(`[data-result="${key}"]`);
+    if (element) {
+        element.textContent = formatValue(key, value);
+    }
+}
+
 export function initMultiStepForm() {
     const form = document.querySelector('[data-form="multistep"]');
     const steps = form.querySelectorAll('[data-form="step"]');
@@ -167,7 +174,6 @@ export function populateTradeBasedFields() {
     // Set crew sizes
     document.querySelector(FORM_FIELDS.crewSize).value = DEFAULTS.layoutCrew.traditional;
 }
-
 
 
 export function updateDustyResults() {
