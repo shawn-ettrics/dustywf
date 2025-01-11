@@ -101,3 +101,31 @@ export const DEFAULTS = {
     hoursPerDay: 8
 };
 
+export const FORM_FIELDS = {
+    // Step 1 - Project Information
+    contractorTrade: 'select[data-name="contractor trade"]',
+    projectVertical: 'select[data-name="Project Vertical"]',
+    countryRadios: 'input[name="country"]',
+    countryHidden: 'input[data-name="Country 2"]',
+    
+    // Step 2 - Manual Layout
+    unit: '#unit-3',
+    volume: 'input[data-name="volume"]',  
+    layoutMonths: 'select[data-name="layout months"]',
+    crewSize: 'input[data-name="crew size"]',
+    laborCost: 'input[data-name="labor cost"]',
+    traditionalProductivity: 'input[data-name="traditional productivity"]',
+
+    // Step 3 
+    dustyCrewDisplay: '[data-default="dusty crew"]',
+    dustyLaborDisplay: '[data-default="dusty labor cost"]',
+    dustyUnitDisplay: '[data-default="unit selected"]',
+    dustyProductivity: 'input[data-name="dusty productivity"]',
+
+    // Hidden Storage Fields
+    traditionalLayoutInfo: '[data-traditional-layout-info]',
+    automatedLayoutInfo: '[data-automated-layout-info]',
+    costAnalysis: '[data-cost-analysis]',
+    gainsAndRoi: 'input[data-name="Gains and ROI"]'
+};
+
