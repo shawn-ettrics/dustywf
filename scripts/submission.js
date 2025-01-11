@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector('form'); // Select the form element
     const multistepWrapper = document.querySelector('.multistep-wrapper'); // Select the multistep-wrapper
+    const formDone = document.querySelector('.w-form-done');
+    const formFail = document.querySelector('.w-form-fail');
 
     if (form && multistepWrapper) {
         // Function to keep the form visible
@@ -24,33 +26,33 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
 
-        // Observe changes to the form's attributes
-        const formObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes' && (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
-                    keepFormVisible(); // Ensure the form stays visible
-                }
-            });
+        // Observe the form's attributes for visibility changes
+        const formObserver = new MutationObserver(() => {
+            keepFormVisible();
         });
 
         formObserver.observe(form, { attributes: true });
 
-        // Observe changes to .w-form-done and .w-form-fail
-        const messageObserver = new MutationObserver(() => {
-            const formDone = form.querySelector('.w-form-done');
-            const formFail = form.querySelector('.w-form-fail');
+        // Observe .w-form-done for visibility changes
+        if (formDone) {
+            const doneObserver = new MutationObserver(() => {
+                moveFormMessage(formDone);
+            });
 
-            moveFormMessage(formDone);
-            moveFormMessage(formFail);
-        });
+            doneObserver.observe(formDone, { attributes: true });
+        }
 
-        messageObserver.observe(form, {
-            childList: true, // Watch for changes to child elements
-            subtree: true,   // Watch within the subtree of the form
-        });
+        // Observe .w-form-fail for visibility changes
+        if (formFail) {
+            const failObserver = new MutationObserver(() => {
+                moveFormMessage(formFail);
+            });
 
-        console.log("Observers initialized.");
+            failObserver.observe(formFail, { attributes: true });
+        }
+
+        console.log("Observers initialized for specific elements.");
     } else {
-        console.log("Form or multistep-wrapper not found in the DOM");
+        console.log("Form, multistep-wrapper, or required elements not found in the DOM");
     }
 });
