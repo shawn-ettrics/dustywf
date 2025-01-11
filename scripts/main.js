@@ -9,6 +9,7 @@ import {
 } from './modules/form-handlers.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
 import { initializeCanvas } from './gridlines.js';
+import { validateStep } from './modules/utils.js';  
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize form submission handling
