@@ -3,9 +3,10 @@ import {
     handleCountryChange, 
     populateTradeBasedFields, 
     initMultiStepForm, 
-    initCustomStepper 
+    initCustomStepper, 
+    updateDustyResults
 } from './modules/form-handlers.js';
-import { updateTraditionalResults, updateDustyResults } from './modules/calculations.js';
+import { updateTraditionalResults  } from './modules/calculations.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
 
 document.addEventListener('DOMContentLoaded', () => {
