@@ -1,4 +1,5 @@
-import { FORM_FIELDS } from './modules/constants.js';
+// main.js
+import { FORM_FIELDS, DEFAULTS } from './modules/constants.js';
 import { 
     handleCountryChange, 
     populateTradeBasedFields, 
