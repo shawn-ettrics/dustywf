@@ -45,47 +45,47 @@ export const PROJECT_TYPES = {
 
 export const TRADITIONAL_EFFICIENCY = {
     'Low': {
-        linearFeet: 6000,
-        points: 580,
-        squareFeet: 12000
+        linearFeet: 800,
+        points: 160,
+        squareFeet: 2500
     },
     'Medium': {
-        linearFeet: 2500,
-        points: 480,
-        squareFeet: 8000
+        linearFeet: 600,
+        points: 120,
+        squareFeet: 1800
     },
     'High': {
-        linearFeet: 1200,
-        points: 320,
-        squareFeet: 6000
+        linearFeet: 400,
+        points: 100,
+        squareFeet: 1200
     },
     'Very High': {
-        linearFeet: 650,
-        points: 150,
-        squareFeet: 3500
+        linearFeet: 200,
+        points: 60,
+        squareFeet: 600
     }
 };
 
 export const DUSTY_EFFICIENCY = {
     'Low': {
-        linearFeet: 28000,
-        points: 3200,
-        squareFeet: 140000
+        linearFeet: 16000,
+        points: 1100,
+        squareFeet: 100000
     },
     'Medium': {
-        linearFeet: 12000,
-        points: 2400,
+        linearFeet: 6400,
+        points: 680,
         squareFeet: 60000
     },
     'High': {
-        linearFeet: 6000,
-        points: 1600,
+        linearFeet: 3000,
+        points: 320,
         squareFeet: 30000
     },
     'Very High': {
-        linearFeet: 3200,
-        points: 800,
-        squareFeet: 16000
+        linearFeet: 2400,
+        points: 260,
+        squareFeet: 14000
     }
 };
 
