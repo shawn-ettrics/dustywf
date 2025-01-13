@@ -4,7 +4,7 @@ export function calculateTraditionalResults(values) {
     const complexity = PROJECT_TYPES[values.projectVertical].complexity;
     const traditionalRate = getEfficiencyRate(values.trade, complexity, false);
     
-    const daysTraditional = Math.round(values.volume / traditionalRate);
+    const daysTraditional = Math.round(values.volume / traditionalRate / values.traditionalCrew);
     const dailyCostTraditional = values.traditionalCrew * values.laborCost * DEFAULTS.hoursPerDay;
     const totalCostTraditional = daysTraditional * dailyCostTraditional;
     
