@@ -141,11 +141,16 @@ export function populateTradeBasedFields() {
     const complexity = PROJECT_TYPES[projectVertical].complexity;
     
     // Set units based on trade
-    const unitSelect = document.querySelector('#unit-3'); // Step 2 unit select
-    const dustyUnitDisplay = document.querySelector('[data-default="unit selected"]'); // Step 3 unit display
+    const unitSelect = document.querySelector(FORM_FIELDS.unit);
+    const dustyUnitDisplay = document.querySelector('[data-default="unit selected"]');
+    const productivityUnitLabel = document.querySelector('[data-unit-label]');
+    
     if (unitSelect && dustyUnitDisplay && tradeConfig) {
         unitSelect.value = tradeConfig.unit;
         dustyUnitDisplay.textContent = tradeConfig.unit;
+        if (productivityUnitLabel) {
+            productivityUnitLabel.textContent = tradeConfig.unit;
+        }
     }
 
     // Set labor cost

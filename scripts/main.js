@@ -34,6 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', handleCountryChange);
     });
 
+    // Add unit change handler
+    const unitSelect = document.querySelector(FORM_FIELDS.unit);
+    const productivityUnitLabel = document.querySelector('[data-unit-label]');
+    if (unitSelect && productivityUnitLabel) {
+        unitSelect.addEventListener('change', (e) => {
+            productivityUnitLabel.textContent = e.target.value;
+        });
+    }
+
     // Step navigation and result updates
     document.querySelectorAll('[data-form="next-btn"]').forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
