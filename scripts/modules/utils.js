@@ -42,7 +42,7 @@ export function collectFormValues() {
         volume: parseFloat(document.querySelector(FORM_FIELDS.volume).value),
         months: parseInt(document.querySelector(FORM_FIELDS.layoutMonths).value), // Parse select value to integer
         traditionalCrew: parseFloat(document.querySelector(FORM_FIELDS.crewSize).value),
-        laborCost: parseFloat(document.querySelector(FORM_FIELDS.laborCost).value)
+        laborCost: parseFloat(document.querySelector(FORM_FIELDS.laborCost).value),
     };
 }
 

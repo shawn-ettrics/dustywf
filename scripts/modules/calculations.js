@@ -2,9 +2,19 @@ import { TRADE_TYPES, PROJECT_TYPES, TRADITIONAL_EFFICIENCY, DUSTY_EFFICIENCY, D
 
 export function calculateTraditionalResults(values) {
     const complexity = PROJECT_TYPES[values.projectVertical].complexity;
-    const traditionalRate = getEfficiencyRate(values.trade, complexity, false);
     
-    const daysTraditional = Math.round(values.volume / traditionalRate / values.traditionalCrew);
+    // Get the default rate from internal formula
+    const defaultTraditionalRate = getEfficiencyRate(values.trade, complexity, false);
+    
+    // Get the current value from the input field
+    const userTraditionalRate = parseFloat(document.querySelector(FORM_FIELDS.traditionalProductivity).value);
+    
+    // Use user input if it differs from default, otherwise use default
+    const effectiveRate = (userTraditionalRate !== defaultTraditionalRate) 
+        ? userTraditionalRate 
+        : defaultTraditionalRate;
+    
+    const daysTraditional = Math.round(values.volume / effectiveRate / values.traditionalCrew);
     const dailyCostTraditional = values.traditionalCrew * values.laborCost * DEFAULTS.hoursPerDay;
     const totalCostTraditional = daysTraditional * dailyCostTraditional;
     
