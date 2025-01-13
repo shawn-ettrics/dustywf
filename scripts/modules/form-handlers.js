@@ -199,9 +199,9 @@ export function updateDustyResults() {
     // Store Step 3 info in hidden field
     const automatedInfo = [
         `dusty crew size:${document.querySelector('[data-default="dusty crew"]').textContent}`,
-        `labor cost 2:${document.querySelector('[data-default="dusty labor cost"]').textContent}`,
+        `labor cost:${document.querySelector('[data-default="dusty labor cost"]').textContent}`,
         `dusty productivity:${document.querySelector(FORM_FIELDS.dustyProductivity).value}`,
-        `Unit 2:${document.querySelector('[data-default="unit selected"]').textContent}`
+        // `Unit 2:${document.querySelector('[data-default="unit selected"]').textContent}`
     ].join(', ');
     document.querySelector(FORM_FIELDS.automatedLayoutInfo).value = automatedInfo;
 
@@ -240,8 +240,8 @@ export function updateTraditionalResults() {
     // Store Step 2 info in hidden field
     const traditionalInfo = [
         `unit:${document.querySelector(FORM_FIELDS.unit).value}`,
-        `volumn:${document.querySelector(FORM_FIELDS.volume).value}`,
-        `layout months:${document.querySelector(FORM_FIELDS.layoutMonths).value}`,
+        // `volumn:${document.querySelector(FORM_FIELDS.volume).value}`,
+        // `layout months:${document.querySelector(FORM_FIELDS.layoutMonths).value}`,
         `crew size:${document.querySelector(FORM_FIELDS.crewSize).value}`,
         `labor cost:${document.querySelector(FORM_FIELDS.laborCost).value}`,
         `traditional productivity:${document.querySelector(FORM_FIELDS.traditionalProductivity).value}`
