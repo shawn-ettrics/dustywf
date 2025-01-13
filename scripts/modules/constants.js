@@ -109,7 +109,7 @@ export const FORM_FIELDS = {
     countryHidden: 'input[data-name="Country 2"]',
     
     // Step 2 - Manual Layout
-    unit: '#unit-3',
+    unit: 'input[data-name="unit"]',
     volume: 'input[data-name="volume"]',  
     layoutMonths: 'select[data-name="layout months"]',
     crewSize: 'input[data-name="crew size"]',
