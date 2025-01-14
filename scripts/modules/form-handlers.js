@@ -21,11 +21,31 @@ export function initAutoUpdateResults() {
     ];
 
     const traditionalSelectFields = [
-        FORM_FIELDS.contractorTrade,
-        FORM_FIELDS.projectVertical,
         FORM_FIELDS.layoutMonths,
         FORM_FIELDS.unit
     ];
+
+    // Handle trade and project vertical changes
+    const tradeSelect = document.querySelector(FORM_FIELDS.contractorTrade);
+    const projectSelect = document.querySelector(FORM_FIELDS.projectVertical);
+
+    if (tradeSelect) {
+        tradeSelect.addEventListener('change', () => {
+            if (hasInitialCalculation) {
+                populateTradeBasedFields();
+                handleFieldUpdate();
+            }
+        });
+    }
+
+    if (projectSelect) {
+        projectSelect.addEventListener('change', () => {
+            if (hasInitialCalculation) {
+                populateTradeBasedFields();
+                handleFieldUpdate();
+            }
+        });
+    }
 
     // Add listeners to traditional input fields
     traditionalInputFields.forEach(selector => {
@@ -42,9 +62,6 @@ export function initAutoUpdateResults() {
         const element = document.querySelector(selector);
         if (element) {
             element.addEventListener('change', () => {
-                if (selector === FORM_FIELDS.contractorTrade || selector === FORM_FIELDS.projectVertical) {
-                    populateTradeBasedFields();
-                }
                 handleFieldUpdate();
             });
         }
@@ -78,14 +95,15 @@ function handleFieldUpdate() {
     const values = collectFormValues();
     if (!validateValues(values)) return;
 
-    // Always update traditional results if we've reached step 2
+    // Update traditional results if we've reached step 2
     if (currentFormStep >= 2) {
         updateTraditionalResults();
-    }
-
-    // Only update Dusty results if we've reached step 3
-    if (currentFormStep >= 3) {
-        updateDustyResults();
+        
+        // If we're on step 3 or later, also update Dusty results
+        // since they depend on traditional results
+        if (currentFormStep >= 3) {
+            updateDustyResults();
+        }
     }
 }
 
