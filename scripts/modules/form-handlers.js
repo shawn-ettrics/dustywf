@@ -3,89 +3,76 @@ import { validateStep, validateValues, collectFormValues, formatValue } from './
 import { calculateTraditionalResults, calculateDustyResults, getEfficiencyRate } from './calculations.js';
 
 let hasInitialCalculation = false;
-let currentFormStep = 1
+let currentFormStep = 1;
 
 export function setInitialCalculation() {
     hasInitialCalculation = true;
 }
+
 export function setCurrentStep(step) {
     currentFormStep = step;
+    console.log('Step set to:', step);
 }
 
 export function initAutoUpdateResults() {
-    // Fields that affect traditional results
-    const traditionalInputFields = [
-        FORM_FIELDS.volume,
-        FORM_FIELDS.laborCost,
-        FORM_FIELDS.traditionalProductivity
+    // Track all fields that should trigger updates
+    const updateTriggerFields = [
+        {
+            selector: FORM_FIELDS.volume,
+            event: 'input'
+        },
+        {
+            selector: FORM_FIELDS.laborCost,
+            event: 'input'
+        },
+        {
+            selector: FORM_FIELDS.traditionalProductivity,
+            event: 'input'
+        },
+        {
+            selector: FORM_FIELDS.layoutMonths,
+            event: 'change'
+        },
+        {
+            selector: FORM_FIELDS.unit,
+            event: 'change'
+        },
+        {
+            selector: FORM_FIELDS.crewSize,
+            event: 'change'
+        },
+        {
+            selector: FORM_FIELDS.dustyProductivity,
+            event: 'input'
+        }
     ];
 
-    const traditionalSelectFields = [
-        FORM_FIELDS.layoutMonths,
-        FORM_FIELDS.unit
-    ];
+    // Add listeners to all update trigger fields
+    updateTriggerFields.forEach(({ selector, event }) => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener(event, handleFieldUpdate);
+        }
+    });
 
-    // Handle trade and project vertical changes
+    // Special handling for trade and project vertical
     const tradeSelect = document.querySelector(FORM_FIELDS.contractorTrade);
     const projectSelect = document.querySelector(FORM_FIELDS.projectVertical);
 
+    function handleTradeOrProjectChange() {
+        if (hasInitialCalculation && currentFormStep >= 2) {
+            console.log('Trade/Project changed - updating fields and recalculating');
+            populateTradeBasedFields();
+            handleFieldUpdate();
+        }
+    }
+
     if (tradeSelect) {
-        tradeSelect.addEventListener('change', () => {
-            if (hasInitialCalculation) {
-                populateTradeBasedFields();
-                handleFieldUpdate();
-            }
-        });
+        tradeSelect.addEventListener('change', handleTradeOrProjectChange);
     }
 
     if (projectSelect) {
-        projectSelect.addEventListener('change', () => {
-            if (hasInitialCalculation) {
-                populateTradeBasedFields();
-                handleFieldUpdate();
-            }
-        });
-    }
-
-    // Add listeners to traditional input fields
-    traditionalInputFields.forEach(selector => {
-        const element = document.querySelector(selector);
-        if (element) {
-            element.addEventListener('input', () => {
-                handleFieldUpdate();
-            });
-        }
-    });
-
-    // Add listeners to traditional select fields
-    traditionalSelectFields.forEach(selector => {
-        const element = document.querySelector(selector);
-        if (element) {
-            element.addEventListener('change', () => {
-                handleFieldUpdate();
-            });
-        }
-    });
-
-    // Add listener for crew size changes
-    const crewSizeInput = document.querySelector(FORM_FIELDS.crewSize);
-    if (crewSizeInput) {
-        crewSizeInput.addEventListener('change', () => {
-            handleFieldUpdate();
-        });
-    }
-
-    // Add listener to Dusty productivity
-    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
-    if (dustyProductivity) {
-        dustyProductivity.addEventListener('input', () => {
-            if (hasInitialCalculation && currentFormStep >= 3) {
-                const values = collectFormValues();
-                if (validateValues(values)) {
-                    updateDustyResults();
-                }
-            }
-        });
+        projectSelect.addEventListener('change', handleTradeOrProjectChange);
     }
 }
 
