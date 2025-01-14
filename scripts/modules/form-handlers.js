@@ -15,7 +15,7 @@ export function setCurrentStep(step) {
     console.log('Step set to:', step);
 }
 
-function recalculateResults(forceTraditional = false) {
+function recalculateResults(forceTraditional = false, dustyOnly = false) {
     if (!hasInitialCalculation) {
         console.log('Skipping - no initial calculation');
         return;
@@ -27,7 +27,7 @@ function recalculateResults(forceTraditional = false) {
         return;
     }
 
-    if (currentFormStep >= 2 || forceTraditional) {
+    if (!dustyOnly && (currentFormStep >= 2 || forceTraditional)) {
         console.log('Updating traditional results');
         updateTraditionalResults();
         
@@ -39,6 +39,9 @@ function recalculateResults(forceTraditional = false) {
             console.log('Cascading to dusty results');
             updateDustyResults();
         }
+    } else if (dustyOnly && currentFormStep >= 3) {
+        console.log('Updating dusty results only');
+        updateDustyResults();
     }
 }
 
@@ -87,17 +90,12 @@ export function initAutoUpdateResults() {
         }
     });
 
-    // Dusty productivity (separate handler since it doesn't affect traditional)
+    // Dusty productivity (now using recalculateResults with dustyOnly flag)
     const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
     if (dustyProductivity) {
         dustyProductivity.addEventListener('input', () => {
-            if (hasInitialCalculation && currentFormStep >= 3) {
-                console.log('Dusty productivity changed');
-                const values = collectFormValues();
-                if (validateValues(values)) {
-                    updateDustyResults();
-                }
-            }
+            console.log('Dusty productivity changed');
+            recalculateResults(false, true);
         });
     }
 }
