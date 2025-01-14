@@ -6,6 +6,7 @@ let hasInitialCalculation = false;
 let currentFormStep = 1;
 
 export function setInitialCalculation() {
+    console.log('Setting initial calculation flag');
     hasInitialCalculation = true;
 }
 
@@ -15,12 +16,6 @@ export function setCurrentStep(step) {
 }
 
 function recalculateResults(forceTraditional = false) {
-    console.log('Recalculating results:', {
-        hasInitialCalculation,
-        currentFormStep,
-        forceTraditional
-    });
-
     if (!hasInitialCalculation) {
         console.log('Skipping - no initial calculation');
         return;
@@ -28,7 +23,7 @@ function recalculateResults(forceTraditional = false) {
     
     const values = collectFormValues();
     if (!validateValues(values)) {
-        console.log('Skipping - validation failed', values);
+        console.log('Skipping - validation failed');
         return;
     }
 
@@ -36,12 +31,13 @@ function recalculateResults(forceTraditional = false) {
         console.log('Updating traditional results');
         updateTraditionalResults();
         
-        if (currentFormStep >= 3) {
-            console.log('Attempting to cascade to dusty results');
+        // If there are any dusty results showing, update them too
+        const dustyResultElement = document.querySelector('[data-result="total-cost-dusty"]');
+        const isDustyShowing = dustyResultElement && dustyResultElement.textContent !== '--';
+        
+        if (isDustyShowing || currentFormStep >= 3) {
+            console.log('Cascading to dusty results');
             updateDustyResults();
-            console.log('Dusty results updated');
-        } else {
-            console.log('Not cascading - current step:', currentFormStep);
         }
     }
 }

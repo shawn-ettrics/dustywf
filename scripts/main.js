@@ -48,12 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Step navigation and result updates
     document.querySelectorAll('[data-form="next-btn"]').forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             
+            // Get the current form step
             const currentStep = document.querySelectorAll('[data-form="step"]')[index];
             
+            // Only proceed if validation passes
             if (validateStep(currentStep)) {
                 if (canvasControls) canvasControls.nextState();
                 
@@ -61,11 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     setCurrentStep(2);
                     populateTradeBasedFields();
                 } else if (index === 1) {
-                    setCurrentStep(3);
+                    setCurrentStep(2);
                     updateTraditionalResults();
-                    setInitialCalculation();
+                    setInitialCalculation(); // Set this AFTER first traditional calculation
                 } else if (index === 2) {
-                    setCurrentStep(4);
+                    setCurrentStep(3);
                     updateDustyResults();
                 }
             }
