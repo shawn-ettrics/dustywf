@@ -23,7 +23,7 @@ export function initializeCanvas() {
     let targetState = 0;
     let currentStops = { orange: 0, grey: 0 };
 
-    function resizeCanvas() {
+    function resizeCanvas() {   
         const rect = canvasWrapper.getBoundingClientRect();
         canvas.width = rect.width;
         canvas.height = rect.height;

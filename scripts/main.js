@@ -5,11 +5,13 @@ import {
     initMultiStepForm, 
     initCustomStepper, 
     updateDustyResults,
-    updateTraditionalResults
+    updateTraditionalResults,
+    initAutoUpdateResults
 } from './modules/form-handlers.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
-import { initializeCanvas } from './gridlines.js';
+import { initializeCanvas } from './modules/gridlines.js';
 import { validateStep } from './modules/utils.js';  
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize form submission handling
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initMultiStepForm();
     initCustomStepper();
+    initAutoUpdateResults()
     
     // Initialize canvas
     const canvasControls = initializeCanvas();

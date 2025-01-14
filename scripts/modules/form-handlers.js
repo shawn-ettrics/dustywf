@@ -248,3 +248,41 @@ export function updateTraditionalResults() {
     ].join(', ');
     document.querySelector(FORM_FIELDS.traditionalLayoutInfo).value = traditionalInfo;
 }
+
+export function initAutoUpdateResults() {
+    // Fields that affect traditional results
+    const traditionalFields = [
+        FORM_FIELDS.volume,
+        FORM_FIELDS.layoutMonths,
+        FORM_FIELDS.crewSize,
+        FORM_FIELDS.laborCost,
+        FORM_FIELDS.traditionalProductivity,
+        FORM_FIELDS.unit
+    ];
+
+    // Add listeners to traditional fields
+    traditionalFields.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener('input', () => {
+                const values = collectFormValues();
+                if (validateValues(values)) {
+                    updateTraditionalResults();
+                    // Also update Dusty results since they depend on traditional costs
+                    updateDustyResults();
+                }
+            });
+        }
+    });
+
+    // Add listener to Dusty productivity
+    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
+    if (dustyProductivity) {
+        dustyProductivity.addEventListener('input', () => {
+            const values = collectFormValues();
+            if (validateValues(values)) {
+                updateDustyResults();
+            }
+        });
+    }
+}
