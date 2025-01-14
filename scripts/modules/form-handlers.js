@@ -2,6 +2,55 @@ import { FORM_FIELDS, DEFAULTS, TRADE_TYPES, PROJECT_TYPES } from './constants.j
 import { validateStep, validateValues, collectFormValues, formatValue } from './utils.js';
 import { calculateTraditionalResults, calculateDustyResults, getEfficiencyRate } from './calculations.js';
 
+let hasInitialCalculation = false;
+
+export function setInitialCalculation() {
+    hasInitialCalculation = true;
+}
+
+export function initAutoUpdateResults() {
+    // Fields that affect traditional results
+    const traditionalFields = [
+        FORM_FIELDS.volume,
+        FORM_FIELDS.layoutMonths,
+        FORM_FIELDS.crewSize,
+        FORM_FIELDS.laborCost,
+        FORM_FIELDS.traditionalProductivity,
+        FORM_FIELDS.unit
+    ];
+
+    // Add listeners to traditional fields
+    traditionalFields.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener('input', () => {
+                // Only update if initial calculation has happened
+                if (hasInitialCalculation) {
+                    const values = collectFormValues();
+                    if (validateValues(values)) {
+                        updateTraditionalResults();
+                        updateDustyResults();
+                    }
+                }
+            });
+        }
+    });
+
+    // Add listener to Dusty productivity
+    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
+    if (dustyProductivity) {
+        dustyProductivity.addEventListener('input', () => {
+            // Only update if initial calculation has happened
+            if (hasInitialCalculation) {
+                const values = collectFormValues();
+                if (validateValues(values)) {
+                    updateDustyResults();
+                }
+            }
+        });
+    }
+}
+
 function updateDisplayValue(key, value) {
     const element = document.querySelector(`[data-result="${key}"]`);
     if (element) {
@@ -247,42 +296,4 @@ export function updateTraditionalResults() {
         `traditional productivity:${document.querySelector(FORM_FIELDS.traditionalProductivity).value}`
     ].join(', ');
     document.querySelector(FORM_FIELDS.traditionalLayoutInfo).value = traditionalInfo;
-}
-
-export function initAutoUpdateResults() {
-    // Fields that affect traditional results
-    const traditionalFields = [
-        FORM_FIELDS.volume,
-        FORM_FIELDS.layoutMonths,
-        FORM_FIELDS.crewSize,
-        FORM_FIELDS.laborCost,
-        FORM_FIELDS.traditionalProductivity,
-        FORM_FIELDS.unit
-    ];
-
-    // Add listeners to traditional fields
-    traditionalFields.forEach(selector => {
-        const element = document.querySelector(selector);
-        if (element) {
-            element.addEventListener('input', () => {
-                const values = collectFormValues();
-                if (validateValues(values)) {
-                    updateTraditionalResults();
-                    // Also update Dusty results since they depend on traditional costs
-                    updateDustyResults();
-                }
-            });
-        }
-    });
-
-    // Add listener to Dusty productivity
-    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
-    if (dustyProductivity) {
-        dustyProductivity.addEventListener('input', () => {
-            const values = collectFormValues();
-            if (validateValues(values)) {
-                updateDustyResults();
-            }
-        });
-    }
 }

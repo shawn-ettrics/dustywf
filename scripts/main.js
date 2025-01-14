@@ -6,6 +6,7 @@ import {
     initCustomStepper, 
     updateDustyResults,
     updateTraditionalResults,
+    setInitialCalculation,
     initAutoUpdateResults
 } from './modules/form-handlers.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     populateTradeBasedFields();
                 } else if (index === 1) {
                     updateTraditionalResults();
+                    setInitialCalculation()
                 } else if (index === 2) {
                     updateDustyResults();
                 }
