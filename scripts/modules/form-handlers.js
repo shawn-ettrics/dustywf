@@ -15,57 +15,76 @@ export function setCurrentStep(step) {
 }
 
 export function initAutoUpdateResults() {
-    // Track all fields that should trigger updates
-    const updateTriggerFields = [
-        {
-            selector: FORM_FIELDS.volume,
-            event: 'input'
-        },
-        {
-            selector: FORM_FIELDS.laborCost,
-            event: 'input'
-        },
-        {
-            selector: FORM_FIELDS.traditionalProductivity,
-            event: 'input'
-        },
-        {
-            selector: FORM_FIELDS.layoutMonths,
-            event: 'change'
-        },
-        {
-            selector: FORM_FIELDS.unit,
-            event: 'change'
-        },
-        {
-            selector: FORM_FIELDS.crewSize,
-            event: 'change'
-        },
-        {
-            selector: FORM_FIELDS.dustyProductivity,
-            event: 'input'
-        }
+    // Fields that affect traditional results
+    const traditionalInputFields = [
+        FORM_FIELDS.volume,
+        FORM_FIELDS.laborCost,
+        FORM_FIELDS.traditionalProductivity,
+        FORM_FIELDS.crewSize
     ];
 
-    // Add listeners to all update trigger fields
-    updateTriggerFields.forEach(({ selector, event }) => {
+    const traditionalSelectFields = [
+        FORM_FIELDS.layoutMonths,
+        FORM_FIELDS.unit
+    ];
+
+    // Add listeners to traditional input fields
+    traditionalInputFields.forEach(selector => {
         const element = document.querySelector(selector);
         if (element) {
-            element.addEventListener(event, handleFieldUpdate);
+            element.addEventListener('input', () => {
+                if (hasInitialCalculation && currentFormStep >= 2) {
+                    console.log('Traditional field changed - updating results');
+                    const values = collectFormValues();
+                    if (validateValues(values)) {
+                        updateTraditionalResults();
+                        // Also update Dusty if we're on step 3
+                        if (currentFormStep >= 3) {
+                            updateDustyResults();
+                        }
+                    }
+                }
+            });
         }
     });
 
-    // Special handling for trade and project vertical
+    // Add listeners to select fields
+    traditionalSelectFields.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener('change', () => {
+                if (hasInitialCalculation && currentFormStep >= 2) {
+                    console.log('Traditional select changed - updating results');
+                    const values = collectFormValues();
+                    if (validateValues(values)) {
+                        updateTraditionalResults();
+                        // Also update Dusty if we're on step 3
+                        if (currentFormStep >= 3) {
+                            updateDustyResults();
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    // Special handling for trade and project changes
     const tradeSelect = document.querySelector(FORM_FIELDS.contractorTrade);
     const projectSelect = document.querySelector(FORM_FIELDS.projectVertical);
 
-    function handleTradeOrProjectChange() {
+    const handleTradeOrProjectChange = () => {
         if (hasInitialCalculation && currentFormStep >= 2) {
-            console.log('Trade/Project changed - updating fields and recalculating');
+            console.log('Trade/Project changed - updating all calculations');
             populateTradeBasedFields();
-            handleFieldUpdate();
+            const values = collectFormValues();
+            if (validateValues(values)) {
+                updateTraditionalResults();
+                if (currentFormStep >= 3) {
+                    updateDustyResults();
+                }
+            }
         }
-    }
+    };
 
     if (tradeSelect) {
         tradeSelect.addEventListener('change', handleTradeOrProjectChange);
@@ -74,32 +93,19 @@ export function initAutoUpdateResults() {
     if (projectSelect) {
         projectSelect.addEventListener('change', handleTradeOrProjectChange);
     }
-}
 
-function handleFieldUpdate() {
-    if (!hasInitialCalculation) {
-        console.log('Skipping update - initial calculation not done yet');
-        return;
-    }
-
-    const values = collectFormValues();
-    if (!validateValues(values)) {
-        console.log('Skipping update - validation failed');
-        return;
-    }
-
-    console.log('Updating results for step:', currentFormStep);
-    
-    // Update traditional results if we've reached step 2
-    if (currentFormStep >= 2) {
-        console.log('Updating traditional results');
-        updateTraditionalResults();
-        
-        // If we're on step 3 or later, also update Dusty results
-        if (currentFormStep >= 3) {
-            console.log('Also updating Dusty results');
-            updateDustyResults();
-        }
+    // Add listener to Dusty productivity
+    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
+    if (dustyProductivity) {
+        dustyProductivity.addEventListener('input', () => {
+            if (hasInitialCalculation && currentFormStep >= 3) {
+                console.log('Dusty productivity changed - updating Dusty results');
+                const values = collectFormValues();
+                if (validateValues(values)) {
+                    updateDustyResults();
+                }
+            }
+        });
     }
 }
 
