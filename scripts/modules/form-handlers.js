@@ -24,31 +24,41 @@ function recalculateResults(forceTraditional = false) {
         console.log('Updating traditional results');
         updateTraditionalResults();
         
+        // Always cascade to dusty results when traditional results change
+        // and we're on step 3 or later
         if (currentFormStep >= 3) {
-            console.log('Updating dusty results');
+            console.log('Cascading update to dusty results');
             updateDustyResults();
         }
     }
 }
 
 export function initAutoUpdateResults() {
-    // Monitor all inputs that affect traditional results
+    // Input fields (use 'input' event)
     [
         FORM_FIELDS.volume,
         FORM_FIELDS.laborCost,
-        FORM_FIELDS.traditionalProductivity,
-        FORM_FIELDS.crewSize,
-        FORM_FIELDS.layoutMonths,
-        FORM_FIELDS.unit
+        FORM_FIELDS.traditionalProductivity
     ].forEach(selector => {
         const element = document.querySelector(selector);
         if (element) {
-            const eventType = element.tagName === 'SELECT' ? 'change' : 'input';
-            element.addEventListener(eventType, () => recalculateResults());
+            element.addEventListener('input', () => recalculateResults());
         }
     });
 
-    // Monitor trade and project changes
+    // Select and number fields that need 'change' event
+    [
+        FORM_FIELDS.layoutMonths,
+        FORM_FIELDS.unit,
+        FORM_FIELDS.crewSize
+    ].forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener('change', () => recalculateResults());
+        }
+    });
+
+    // Trade and project verticals
     [FORM_FIELDS.contractorTrade, FORM_FIELDS.projectVertical].forEach(selector => {
         const element = document.querySelector(selector);
         if (element) {
@@ -62,7 +72,7 @@ export function initAutoUpdateResults() {
         }
     });
 
-    // Monitor dusty productivity
+    // Dusty productivity (separate handler since it doesn't affect traditional)
     const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
     if (dustyProductivity) {
         dustyProductivity.addEventListener('input', () => {
