@@ -3,6 +3,7 @@ import { validateStep, validateValues, collectFormValues, formatValue } from './
 import { calculateTraditionalResults, calculateDustyResults, getEfficiencyRate } from './calculations.js';
 
 let hasInitialCalculation = false;
+let currentFormStep = 1
 
 export function setInitialCalculation() {
     hasInitialCalculation = true;
