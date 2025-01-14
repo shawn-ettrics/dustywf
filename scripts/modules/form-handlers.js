@@ -90,18 +90,27 @@ export function initAutoUpdateResults() {
 }
 
 function handleFieldUpdate() {
-    if (!hasInitialCalculation) return;
+    if (!hasInitialCalculation) {
+        console.log('Skipping update - initial calculation not done yet');
+        return;
+    }
 
     const values = collectFormValues();
-    if (!validateValues(values)) return;
+    if (!validateValues(values)) {
+        console.log('Skipping update - validation failed');
+        return;
+    }
 
+    console.log('Updating results for step:', currentFormStep);
+    
     // Update traditional results if we've reached step 2
     if (currentFormStep >= 2) {
+        console.log('Updating traditional results');
         updateTraditionalResults();
         
         // If we're on step 3 or later, also update Dusty results
-        // since they depend on traditional results
         if (currentFormStep >= 3) {
+            console.log('Also updating Dusty results');
             updateDustyResults();
         }
     }
@@ -271,21 +280,27 @@ export function populateTradeBasedFields() {
     const dustyRate = getEfficiencyRate(selectedTrade, complexity, true);
 
     const traditionalProductivity = document.querySelector(FORM_FIELDS.traditionalProductivity);
-    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
-    
     if (traditionalProductivity && traditionalRate) {
         traditionalProductivity.value = traditionalRate;
+        // Trigger an input event to force recalculation
+        traditionalProductivity.dispatchEvent(new Event('input'));
     }
     
+    const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
     if (dustyProductivity && dustyRate) {
         dustyProductivity.value = dustyRate;
+        // Trigger an input event to force recalculation
+        dustyProductivity.dispatchEvent(new Event('input'));
     }
 
     // Set crew sizes
-    document.querySelector(FORM_FIELDS.crewSize).value = DEFAULTS.layoutCrew.traditional;
+    const crewSizeInput = document.querySelector(FORM_FIELDS.crewSize);
+    if (crewSizeInput) {
+        crewSizeInput.value = DEFAULTS.layoutCrew.traditional;
+        // Trigger a change event to force recalculation
+        crewSizeInput.dispatchEvent(new Event('change'));
+    }
 }
-
-
 export function updateDustyResults() {
     const values = collectFormValues();
     if (!validateValues(values)) return;
