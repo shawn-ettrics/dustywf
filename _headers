@@ -1,4 +1,4 @@
 /*
-  Access-Control-Allow-Origin: https://dusty-robotics.webflow.io https://www.dustyrobotics.com
+  Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
   Access-Control-Allow-Headers: Content-Type
