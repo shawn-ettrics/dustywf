@@ -15,20 +15,33 @@ export function setCurrentStep(step) {
 }
 
 function recalculateResults(forceTraditional = false) {
-    if (!hasInitialCalculation) return;
+    console.log('Recalculating results:', {
+        hasInitialCalculation,
+        currentFormStep,
+        forceTraditional
+    });
+
+    if (!hasInitialCalculation) {
+        console.log('Skipping - no initial calculation');
+        return;
+    }
     
     const values = collectFormValues();
-    if (!validateValues(values)) return;
+    if (!validateValues(values)) {
+        console.log('Skipping - validation failed', values);
+        return;
+    }
 
     if (currentFormStep >= 2 || forceTraditional) {
         console.log('Updating traditional results');
         updateTraditionalResults();
         
-        // Always cascade to dusty results when traditional results change
-        // and we're on step 3 or later
         if (currentFormStep >= 3) {
-            console.log('Cascading update to dusty results');
+            console.log('Attempting to cascade to dusty results');
             updateDustyResults();
+            console.log('Dusty results updated');
+        } else {
+            console.log('Not cascading - current step:', currentFormStep);
         }
     }
 }
@@ -42,7 +55,10 @@ export function initAutoUpdateResults() {
     ].forEach(selector => {
         const element = document.querySelector(selector);
         if (element) {
-            element.addEventListener('input', () => recalculateResults());
+            element.addEventListener('input', () => {
+                console.log('Input field changed:', selector);
+                recalculateResults();
+            });
         }
     });
 
@@ -54,7 +70,10 @@ export function initAutoUpdateResults() {
     ].forEach(selector => {
         const element = document.querySelector(selector);
         if (element) {
-            element.addEventListener('change', () => recalculateResults());
+            element.addEventListener('change', () => {
+                console.log('Change field updated:', selector);
+                recalculateResults();
+            });
         }
     });
 
@@ -64,7 +83,7 @@ export function initAutoUpdateResults() {
         if (element) {
             element.addEventListener('change', () => {
                 if (hasInitialCalculation) {
-                    console.log('Trade/Project changed - updating fields and recalculating');
+                    console.log('Trade/Project changed:', selector);
                     populateTradeBasedFields();
                     recalculateResults(true);
                 }
@@ -77,7 +96,7 @@ export function initAutoUpdateResults() {
     if (dustyProductivity) {
         dustyProductivity.addEventListener('input', () => {
             if (hasInitialCalculation && currentFormStep >= 3) {
-                console.log('Updating dusty results only');
+                console.log('Dusty productivity changed');
                 const values = collectFormValues();
                 if (validateValues(values)) {
                     updateDustyResults();
