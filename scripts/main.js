@@ -7,7 +7,8 @@ import {
     updateDustyResults,
     updateTraditionalResults,
     setInitialCalculation,
-    initAutoUpdateResults
+    initAutoUpdateResults,
+    setCurrentStep
 } from './modules/form-handlers.js';
 import { initFormSubmissionHandler } from './modules/form-submission.js';
 import { initializeCanvas } from './modules/gridlines.js';
