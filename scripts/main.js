@@ -47,35 +47,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Step navigation and result updates
     document.querySelectorAll('[data-form="next-btn"]').forEach((btn, index) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             
-            // Get the current form step
             const currentStep = document.querySelectorAll('[data-form="step"]')[index];
             
-            // Only proceed if validation passes
             if (validateStep(currentStep)) {
                 if (canvasControls) canvasControls.nextState();
                 
                 if (index === 0) {
+                    setCurrentStep(2);
                     populateTradeBasedFields();
                 } else if (index === 1) {
+                    setCurrentStep(3);
                     updateTraditionalResults();
-                    setInitialCalculation()
+                    setInitialCalculation();
                 } else if (index === 2) {
+                    setCurrentStep(4);
                     updateDustyResults();
                 }
             }
         });
     });
-
-    // Handle back button clicks for canvas animation
     document.querySelectorAll('[data-form="back-btn"]').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            e.preventDefault()
+            e.preventDefault();
             if (canvasControls) canvasControls.prevState();
+            
+            // Update current step when going back
+            const currentStepEl = Array.from(document.querySelectorAll('[data-form="step"]'))
+                .find(step => step.style.display !== 'none');
+            const stepIndex = Array.from(document.querySelectorAll('[data-form="step"]'))
+                .indexOf(currentStepEl);
+            setCurrentStep(stepIndex + 1); // +1 because we use 1-based step numbers
         });
     });
 });

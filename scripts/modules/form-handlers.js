@@ -7,47 +7,84 @@ let hasInitialCalculation = false;
 export function setInitialCalculation() {
     hasInitialCalculation = true;
 }
+export function setCurrentStep(step) {
+    currentFormStep = step;
+}
 
 export function initAutoUpdateResults() {
     // Fields that affect traditional results
-    const traditionalFields = [
+    const traditionalInputFields = [
         FORM_FIELDS.volume,
-        FORM_FIELDS.layoutMonths,
-        FORM_FIELDS.crewSize,
         FORM_FIELDS.laborCost,
-        FORM_FIELDS.traditionalProductivity,
+        FORM_FIELDS.traditionalProductivity
+    ];
+
+    const traditionalSelectFields = [
+        FORM_FIELDS.contractorTrade,
+        FORM_FIELDS.projectVertical,
+        FORM_FIELDS.layoutMonths,
         FORM_FIELDS.unit
     ];
 
-    // Add listeners to traditional fields
-    traditionalFields.forEach(selector => {
+    // Add listeners to traditional input fields
+    traditionalInputFields.forEach(selector => {
         const element = document.querySelector(selector);
         if (element) {
             element.addEventListener('input', () => {
-                // Only update if initial calculation has happened
-                if (hasInitialCalculation) {
-                    const values = collectFormValues();
-                    if (validateValues(values)) {
-                        updateTraditionalResults();
-                        updateDustyResults();
-                    }
-                }
+                handleFieldUpdate();
             });
         }
     });
+
+    // Add listeners to traditional select fields
+    traditionalSelectFields.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.addEventListener('change', () => {
+                if (selector === FORM_FIELDS.contractorTrade || selector === FORM_FIELDS.projectVertical) {
+                    populateTradeBasedFields();
+                }
+                handleFieldUpdate();
+            });
+        }
+    });
+
+    // Add listener for crew size changes
+    const crewSizeInput = document.querySelector(FORM_FIELDS.crewSize);
+    if (crewSizeInput) {
+        crewSizeInput.addEventListener('change', () => {
+            handleFieldUpdate();
+        });
+    }
 
     // Add listener to Dusty productivity
     const dustyProductivity = document.querySelector(FORM_FIELDS.dustyProductivity);
     if (dustyProductivity) {
         dustyProductivity.addEventListener('input', () => {
-            // Only update if initial calculation has happened
-            if (hasInitialCalculation) {
+            if (hasInitialCalculation && currentFormStep >= 3) {
                 const values = collectFormValues();
                 if (validateValues(values)) {
                     updateDustyResults();
                 }
             }
         });
+    }
+}
+
+function handleFieldUpdate() {
+    if (!hasInitialCalculation) return;
+
+    const values = collectFormValues();
+    if (!validateValues(values)) return;
+
+    // Always update traditional results if we've reached step 2
+    if (currentFormStep >= 2) {
+        updateTraditionalResults();
+    }
+
+    // Only update Dusty results if we've reached step 3
+    if (currentFormStep >= 3) {
+        updateDustyResults();
     }
 }
 
